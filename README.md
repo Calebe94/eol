@@ -9,7 +9,6 @@ A command-line interface for checking product lifecycle information from [endofl
 
 - List all supported products
 - View detailed lifecycle information for any product
-- Watch mode for monitoring changes
 - Multiple output formats (JSON, Table, CSV)
 - Filtering and sorting capabilities
 - Cross-platform support
@@ -42,7 +41,6 @@ Commands:
 Flags:
   -f, --format string   Output format (table|json|csv) (default "table")
   -o, --output string   Write output to file
-  -w, --watch duration  Auto-refresh interval (e.g., 5m, 1h)
   --no-color            Disable color output
   -h, --help            Show help
 ```
@@ -62,11 +60,6 @@ eol product ubuntu --format json
 ### Check specific cycle
 ```bash
 eol cycle python 3.7
-```
-
-### Monitor RHEL cycles
-```bash
-eol product rhel --watch 15m
 ```
 
 ### Filter active support cycles
