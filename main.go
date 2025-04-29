@@ -31,10 +31,10 @@ func main() {
 
 func handleListCommand() {
 	fs := flag.NewFlagSet("list", flag.ExitOnError)
-	cli := parseCommonFlags(fs)
+	var cli CLI
+	parseCommonFlags(fs, &cli)
 	fs.Parse(os.Args[2:])
 
-	fmt.Printf("cli.format: %s\n", cli.format)
 	products, err := ListProducts()
 	if err != nil {
 		log.Fatalf("Error fetching products: %v", err)
@@ -50,12 +50,9 @@ func handleListCommand() {
 
 func handleProductCommand() {
 	fs := flag.NewFlagSet("product", flag.ExitOnError)
-	cli := parseCommonFlags(fs)
-
-	err := fs.Parse(os.Args[2:])
-	if err != nil {
-		log.Fatal(err)
-	}
+	var cli CLI
+	parseCommonFlags(fs, &cli)
+	fs.Parse(os.Args[2:])
 
 	if fs.NArg() == 0 {
 		log.Fatal("Product name required")
@@ -77,7 +74,8 @@ func handleProductCommand() {
 
 func handleCycleCommand() {
 	fs := flag.NewFlagSet("cycle", flag.ExitOnError)
-	cli := parseCommonFlags(fs)
+	var cli CLI
+	parseCommonFlags(fs, &cli)
 	fs.Parse(os.Args[2:])
 
 	if fs.NArg() < 2 {
@@ -99,13 +97,11 @@ func handleCycleCommand() {
 	handleOutput(output, cli.output)
 }
 
-func parseCommonFlags(fs *flag.FlagSet) CLI {
-	var cli CLI
+func parseCommonFlags(fs *flag.FlagSet, cli *CLI) {
 	fs.StringVar(&cli.format, "format", "table", "Output format (table|json|csv)")
 	fs.StringVar(&cli.format, "f", "table", "Output format (shorthand)")
 	fs.StringVar(&cli.output, "output", "", "Output file")
 	fs.DurationVar(&cli.watch, "watch", 0, "Refresh interval")
 	fs.BoolVar(&cli.noColor, "no-color", false, "Disable color output")
 	fs.StringVar(&cli.filter, "filter", "", "Filter expression")
-	return cli
 }
